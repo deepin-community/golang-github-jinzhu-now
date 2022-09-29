@@ -1,0 +1,60 @@
+golang-github-jinzhu-now (1.1.1-1) unstable; urgency=medium
+
+  * Add debian/watch
+  * New upstream version 1.1.1
+
+ -- Anthony Fok <foka@debian.org>  Wed, 10 Mar 2021 15:11:14 -0700
+
+golang-github-jinzhu-now (0.0~git20151001.0.ce80572-3) unstable; urgency=medium
+
+  [ Alexandre Viau ]
+  * Point Vcs-* urls to salsa.debian.org.
+
+  [ Debian Janitor (Jelmer Vernooĳ) ]
+  * Use secure copyright file specification URI.
+  * Bump debhelper from old 9 to 12.
+  * Set debhelper-compat version in Build-Depends.
+  * Change priority extra to priority optional.
+  * Set upstream metadata fields: Bug-Database, Bug-Submit.
+  * Apply multi-arch hints.
+    + golang-github-jinzhu-now-dev: Add Multi-Arch: foreign.
+
+  [ Anthony Fok ]
+  * debian/control:
+    + Change Section from devel to golang
+    + Update Maintainer email address to team+pkg-go@tracker.debian.org
+    + Apply "cme fix dpkg" fixes:
+      - Organize debian/control fields
+    + Bump Standards-Version to 4.5.1 (no change)
+    + Add Testsuite: autopkgtest-pkg-go
+    + Bump debhelper dependency to "Build-Depends: debhelper-compat (= 13)"
+    + Change build-dependency on golang-go to golang-any
+    + Add "Rules-Requires-Root: no" to debian/control
+    + Add myself to Uploaders
+  * debian/gbp.conf: Set debian-branch to debian/sid for DEP-14 conformance
+
+ -- Anthony Fok <foka@debian.org>  Wed, 10 Mar 2021 14:28:10 -0700
+
+golang-github-jinzhu-now (0.0~git20151001.0.ce80572-2.1) unstable; urgency=medium
+
+  * Non maintainer upload by the Reproducible Builds team.
+  * No source change upload to rebuild on buildd with .buildinfo files.
+
+ -- Holger Levsen <holger@debian.org>  Thu, 07 Jan 2021 17:17:43 +0100
+
+golang-github-jinzhu-now (0.0~git20151001.0.ce80572-2) unstable; urgency=medium
+
+  [ Paul Tagliamonte ]
+  * Team upload.
+  * Use a secure transport for the Vcs-Git and Vcs-Browser URL
+
+  [ Liang Yan ]
+  * Add tzdata into build-depends (Closes: #839417).
+
+ -- Liang Yan <liangy@hpe.com>  Mon, 10 Oct 2016 15:46:10 -0600
+
+golang-github-jinzhu-now (0.0~git20151001.0.ce80572-1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Tianon Gravi <tianon@debian.org>  Fri, 16 Oct 2015 10:14:13 -0700
