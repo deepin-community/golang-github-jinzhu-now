@@ -213,7 +213,15 @@ func TestMondayAndSunday(t *testing.T) {
 
 	assert(With(nDst).Monday(), "2017-10-23 00:00:00", "Monday DST")
 
+	assert(With(n).Monday("17:51:49"), "2013-11-18 17:51:49", "Monday")
+
+	assert(With(n).Monday("17:51"), "2013-11-18 17:51:00", "Monday")
+
 	assert(With(n).Sunday(), "2013-11-24 00:00:00", "Sunday")
+
+	assert(With(n).Sunday("18:19:20"), "2013-11-24 18:19:20", "Sunday")
+
+	assert(With(n).Sunday("18:19"), "2013-11-24 18:19:00", "Sunday")
 
 	assert(With(n2).Sunday(), "2013-11-24 00:00:00", "Sunday")
 
@@ -275,6 +283,43 @@ func TestParse(t *testing.T) {
 	assert(With(n).MustParse("2011-1-1", "18:20:39"), "2011-01-01 18:20:39", "Parse two strings 2011-01-01, 18:20:39")
 
 	assert(With(n).MustParse("2011-01-01", "18"), "2011-01-01 18:00:00", "Parse two strings 2011-01-01, 18")
+
+	assert(With(n).MustParse("2002-10-12T00:14:56Z"), "2002-10-12 00:14:56", "Parse 2002-10-12T00:14:56Z")
+	assert(With(n).MustParse("2002-10-12T00:00:56Z"), "2002-10-12 00:00:56", "Parse 2002-10-12T00:00:56Z")
+	assert(With(n).MustParse("2002-10-12T00:00:00.999Z"), "2002-10-12 00:00:00.999", "Parse 2002-10-12T00:00:00.999Z")
+	assert(With(n).MustParse("2002-10-12T00:14:56.999999Z"), "2002-10-12 00:14:56.999999", "Parse 2002-10-12T00:14:56.999999Z")
+	assert(With(n).MustParse("2002-10-12T00:00:56.999999999Z"), "2002-10-12 00:00:56.999999999", "Parse 2002-10-12T00:00:56.999999999Z")
+
+	assert(With(n).MustParse("2002-10-12T00:14:56+08:00"), "2002-10-12 00:14:56", "Parse 2002-10-12T00:14:56+08:00")
+	_, off := With(n).MustParse("2002-10-12T00:14:56+08:00").Zone()
+	if (off != 28800) {
+		t.Errorf("Parse 2002-10-12T00:14:56+08:00 shouldn't lose time zone offset")
+	}
+	assert(With(n).MustParse("2002-10-12T00:00:56-07:00"), "2002-10-12 00:00:56", "Parse 2002-10-12T00:00:56-07:00")
+	_, off2 := With(n).MustParse("2002-10-12T00:00:56-07:00").Zone()
+	if (off2 != -25200){
+		t.Errorf("Parse 2002-10-12T00:00:56-07:00 shouldn't lose time zone offset")
+	}
+	assert(With(n).MustParse("2002-10-12T00:01:12.333+0200"), "2002-10-12 00:01:12.333", "Parse 2002-10-12T00:01:12.333+0200")
+	_, off3 := With(n).MustParse("2002-10-12T00:01:12.333+0200").Zone()
+	if (off3 != 7200){
+		t.Errorf("Parse 2002-10-12T00:01:12.333+0200 shouldn't lose time zone offset")
+	}
+	assert(With(n).MustParse("2002-10-12T00:00:56.999999999+08:00"), "2002-10-12 00:00:56.999999999", "Parse 2002-10-12T00:00:56.999999999+08:00")
+	_, off4 := With(n).MustParse("2002-10-12T00:14:56.999999999+08:00").Zone()
+	if (off4 != 28800) {
+		t.Errorf("Parse 2002-10-12T00:14:56.999999999+08:00 shouldn't lose time zone offset")
+	}
+	assert(With(n).MustParse("2002-10-12T00:00:56.666666-07:00"), "2002-10-12 00:00:56.666666", "Parse 2002-10-12T00:00:56.666666-07:00")
+	_, off5 := With(n).MustParse("2002-10-12T00:00:56.666666-07:00").Zone()
+	if (off5 != -25200){
+		t.Errorf("Parse 2002-10-12T00:00:56.666666-07:00 shouldn't lose time zone offset")
+	}
+	assert(With(n).MustParse("2002-10-12T00:01:12.999999999-06"), "2002-10-12 00:01:12.999999999", "Parse 2002-10-12T00:01:12.999999999-06")
+	_, off6 := With(n).MustParse("2002-10-12T00:01:12.999999999-06").Zone()
+	if (off6 != -21600){
+		t.Errorf("Parse 2002-10-12T00:01:12.999999999-06 shouldn't lose time zone offset")
+	}
 
 	TimeFormats = append(TimeFormats, "02 Jan 15:04")
 	assert(With(n).MustParse("04 Feb 12:09"), "2013-02-04 12:09:00", "Parse 04 Feb 12:09 with specified format")
@@ -348,6 +393,25 @@ func TestConfig(t *testing.T) {
 	}
 }
 
+func TestQuarter(t *testing.T) {
+	type test struct {
+		givenDate       time.Time
+		expectedQuarter uint
+	}
+
+	tests := []test{
+		{time.Date(2021, 6, 18, 0, 0, 0, 0, time.UTC), 2},
+		{time.Date(2021, 7, 18, 0, 0, 0, 0, time.UTC), 3},
+	}
+
+	for _, tc := range tests {
+		got := With(tc.givenDate).Quarter()
+		if got != tc.expectedQuarter {
+			t.Fatalf("Quarter %d expected, got %d", tc.expectedQuarter, got)
+		}
+	}
+}
+
 func Example() {
 	time.Now() // 2013-11-18 17:51:49.123456789 Mon
 
@@ -377,7 +441,9 @@ func Example() {
 	t := time.Date(2013, 02, 18, 17, 51, 49, 123456789, time.UTC)
 	With(t).EndOfMonth() // 2013-02-28 23:59:59.999999999 Thu
 
-	Monday()      // 2013-11-18 00:00:00 Mon
-	Sunday()      // 2013-11-24 00:00:00 Sun
-	EndOfSunday() // 2013-11-24 23:59:59.999999999 Sun
+	Monday()        // 2013-11-18 00:00:00 Mon
+	Monday("17:44") // 2013-11-18 17:44:00 Mon
+	Sunday()        // 2013-11-24 00:00:00 Sun
+	Sunday("17:44") // 2013-11-24 17:44:00 Sun
+	EndOfSunday()   // 2013-11-24 23:59:59.999999999 Sun
 }
