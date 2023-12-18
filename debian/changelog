@@ -1,3 +1,20 @@
+golang-github-jinzhu-now (1.1.5-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream version 1.1.5
+  * Build-depend on tzdata-legacy (or older tzdata version)
+    Closes: #1052785
+
+ -- Felix Geyer <fgeyer@debian.org>  Thu, 05 Oct 2023 19:05:08 +0200
+
+golang-github-jinzhu-now (1.1.1-2) unstable; urgency=medium
+
+  [ Debian Janitor ]
+  * Set upstream metadata fields: Repository, Repository-Browse.
+  * Update standards version to 4.6.0, no changes needed.
+
+ -- Jelmer Vernooĳ <jelmer@debian.org>  Tue, 13 Dec 2022 20:40:28 +0000
+
 golang-github-jinzhu-now (1.1.1-1) unstable; urgency=medium
 
   * Add debian/watch
